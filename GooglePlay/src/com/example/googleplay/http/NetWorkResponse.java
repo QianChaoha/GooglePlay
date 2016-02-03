@@ -32,22 +32,6 @@ public abstract class NetWorkResponse<E> {
 	final String RESULT_TAG = "result";
 
 	/**
-	 * 发出一个请求,返回String,使用自定义的errorListener
-	 * 
-	 * @param mProgressDialog
-	 * @param method
-	 * @param url
-	 * @param param
-	 * @param errorListener
-	 */
-	// public NetWorkResponse(Context context, RequestQueue requestQueue, int
-	// method, final String url, Map<String, String> param,
-	// Response.ErrorListener errorListener) {
-	// initProgressDialog(context);
-	// doStringRequest(context, method, url, param, errorListener);
-	// }
-
-	/**
 	 * 发出一个请求,返回String,使用默认的的errorListener
 	 * 
 	 * @param mProgressDialog
@@ -105,48 +89,6 @@ public abstract class NetWorkResponse<E> {
 		request.setTag(NetRequest.TAG);
 		NetRequest.getInstance(context.getApplicationContext()).getRequestQueue().add(request);
 	}
-
-	// public void doJsonRequest(final ProgressDialog mProgressDialog, int
-	// method, final String url, JSONObject param,
-	// Response.ErrorListener errorListener) {
-	// if (mProgressDialog != null) {
-	// mProgressDialog.show();
-	// }
-	// if (errorListener == null) {
-	// errorListener = new Response.ErrorListener() {
-	//
-	// @Override
-	// public void onErrorResponse(VolleyError volleyError) {
-	// errorResponce(con, url, volleyError);
-	// }
-	// };
-	// }
-	// JsonObjectRequest request = new JsonObjectRequest(method, url, param, new
-	// Response.Listener<JSONObject>() {
-	//
-	// @Override
-	// public void onResponse(JSONObject response) {
-	// successResponce(mProgressDialog, url, response.toString());
-	// }
-	// }, errorListener) {
-	// @Override
-	// protected Response<JSONObject> parseNetworkResponse(NetworkResponse
-	// response) {
-	// try {
-	// JSONObject jsonObject = new JSONObject(new String(response.data,
-	// "utf-8"));
-	// return Response.success(jsonObject,
-	// HttpHeaderParser.parseCacheHeaders(response));
-	// } catch (UnsupportedEncodingException e) {
-	// return Response.error(new ParseError(e));
-	// } catch (JSONException e) {
-	// return Response.error(new ParseError(e));
-	// }
-	//
-	// }
-	// };
-	// NetRequest.getInstance(context.getApplicationContext()).getRequestQueue().add(request);
-	// }
 
 	/**
 	 * 将服务器返回的数据缓存在本地并解析
@@ -233,6 +175,7 @@ public abstract class NetWorkResponse<E> {
 	 * @param jsonString
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public E createClassFromJson(String jsonString) {
 		return (E) mGson.fromJson(jsonString, getEType());
 	}

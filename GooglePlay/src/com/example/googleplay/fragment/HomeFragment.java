@@ -9,8 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -23,9 +21,9 @@ import com.example.googleplay.base.BaseListView;
 import com.example.googleplay.data.AppInfo;
 import com.example.googleplay.data.HomeData;
 import com.example.googleplay.http.HttpHelper;
-import com.example.googleplay.http.NetRequest;
 import com.example.googleplay.http.NetWorkResponse;
-import com.example.googleplay.util.ScreenUtil;
+import com.example.googleplay.view.HeadView;
+import com.example.googleplay.view.IndicatorView;
 import com.example.volley.Request.Method;
 import com.google.gson.Gson;
 
@@ -39,9 +37,11 @@ public class HomeFragment extends BaseFragment {
 	private HomeData homeData;
 	private List<AppInfo> appInfos;
 	private boolean clearList = true;
+	private IndicatorView mIndicatorView;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			viewPager.setCurrentItem((viewPager.getCurrentItem() + 1) % pictures.size());
+			mIndicatorView.setSelection((viewPager.getCurrentItem() + 1) % pictures.size());
 			handler.sendEmptyMessageDelayed(0, 3000);
 		};
 	};
@@ -59,9 +59,9 @@ public class HomeFragment extends BaseFragment {
 	@Override
 	protected void initView(View view) {
 		listview = (BaseListView) view.findViewById(R.id.listview);
-		viewPager = new ViewPager(getActivity());
-		viewPager.setLayoutParams(new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT, ScreenUtil.dip2px(getActivity(), 200)));
-		listview.addHeaderView(viewPager);
+		viewPager=new ViewPager(getActivity());
+		mIndicatorView = new IndicatorView(getActivity());
+		initHeadView();
 		listview.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -69,12 +69,24 @@ public class HomeFragment extends BaseFragment {
 				int newPosition = position - listview.getHeaderViewsCount();
 				if (newPosition >= 0 && appInfos != null && appInfos.size() > 0) {
 					clearList = false;
+
+					// 添加观察者
+					// DownloadManager downloadManager=new DownloadManager();
+					// downloadManager.addObserver(homeContentAdapter);
+
 					Intent intent = new Intent(getActivity(), DetailActivity.class);
 					intent.putExtra("packageName", appInfos.get(newPosition).getPackageName());
+					// intent.putExtra("downloadManager", downloadManager);
 					startActivity(intent);
 				}
 			}
 		});
+	}
+
+	private void initHeadView() {
+		HeadView headView = new HeadView(getActivity());
+		headView.initData(200, viewPager, mIndicatorView);
+		listview.addHeaderView(headView);
 	}
 
 	@Override
@@ -116,12 +128,11 @@ public class HomeFragment extends BaseFragment {
 
 					@Override
 					protected void size(int currentSize, int totalSize) {
-						
+
 					}
 
 				};
 				listview.setAdapter(homeContentAdapter);
-
 				viewPager.setOnTouchListener(new OnTouchListener() {
 
 					@Override
@@ -143,15 +154,12 @@ public class HomeFragment extends BaseFragment {
 				});
 				// 增加图片轮询
 				viewPager.setAdapter(new HomePageAdapter(getActivity(), pictures));
+				mIndicatorView.setCount(pictures.size());
 				if (pictures != null && pictures.size() > 0) {
 					handler.sendEmptyMessageDelayed(0, 3000);
 				}
 			}
 		};
-	}
-
-	public Handler getHandler() {
-		return handler;
 	}
 
 	@Override

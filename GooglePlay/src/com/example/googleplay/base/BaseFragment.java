@@ -14,7 +14,6 @@ import com.example.googleplay.util.SharePreference;
 
 public abstract class BaseFragment extends Fragment {
 
-	protected NetWorkResponse netWorkResponse;
 
 	/**
 	 * 配置文件操作
@@ -31,6 +30,7 @@ public abstract class BaseFragment extends Fragment {
 		if (mRootView == null) {
 			mRootView = inflater.inflate(getLayoutId(), null);
 			initView(mRootView);
+			initData();
 		}else {
 			if (mRootView.getParent() instanceof ViewGroup) {
 				((ViewGroup)mRootView.getParent()).removeAllViews();
@@ -42,7 +42,6 @@ public abstract class BaseFragment extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		initData();
 	}
 
 	/**
@@ -96,12 +95,4 @@ public abstract class BaseFragment extends Fragment {
 		return mRootView;
 	}
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		if (netWorkResponse != null && netWorkResponse.getProgressDialog() != null) {
-			netWorkResponse.getProgressDialog().dismiss();
-		}
-//		NetRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue().cancelAll(getActivity());
-	}
 }

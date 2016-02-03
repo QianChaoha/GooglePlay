@@ -50,7 +50,7 @@ public class CategoryFragment extends BaseFragment {
 						 infos.add(infoContent);
 					}
 				}
-				baseListView.setAdapter(new CategoryAdapter(getContext(), infos));
+				baseListView.setAdapter(new CategoryAdapter(getActivity(), infos));
 			}
 		};
 	}

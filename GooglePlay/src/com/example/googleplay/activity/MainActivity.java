@@ -75,14 +75,14 @@ public class MainActivity extends BaseActivity implements OnQueryTextListener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_search:
-			System.out.println("-------");
-			break;
-
-		default:
-			break;
-		}
+//		switch (item.getItemId()) {
+//		case R.id.action_search:
+//			System.out.println("-------");
+//			break;
+//
+//		default:
+//			break;
+//		}
 		return actionBarDrawerToggle.onOptionsItemSelected(item) | super.onOptionsItemSelected(item);
 	}
 

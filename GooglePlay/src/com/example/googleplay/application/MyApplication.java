@@ -7,8 +7,6 @@ import android.os.Build;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
-import com.squareup.leakcanary.LeakCanary;
-
 /**
  * Created by QianChao on 2015/8/17.
  */
